@@ -1,0 +1,5 @@
+{
+  "execution": "qwen-turbo",
+  "reflection": "qwen-plus",
+  "planning": "qwen-plus"
+}

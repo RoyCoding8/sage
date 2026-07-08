@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+test_run/
+*.egg-info/
+dist/
+build/
+tmp/
+.venv/
+.pytest_cache/
+
+# Sage data directories (root only)
+/memory/
+/rules/
+/.local/
+/metrics/
+metrics.json
+
+# Runtime / DB / backup (root only)
+/_memory_backup_*/
+/_verify_*
+/_smoke_*
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Frontend (React + Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/*.log
+frontend/.env.local
+frontend/.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other
+.ruff_cache/
+/.plan/
+
+# Documentation
+*.md
+!/README.md
+!/docs/
+!/docs/**/*.md
+!/knowledge/
+!/knowledge/*.md

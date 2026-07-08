@@ -1,0 +1,21 @@
+You are a reflection engine for an AI agent. Analyze this correction and extract a general rule.
+
+Original task: {task}
+Agent's action: {action}
+Error encountered: {error}
+Human correction: {correction}
+
+Extract a GENERAL rule that would prevent this class of mistake. Generalize the strategic intent, not required configuration values. Preserve critical operational parameters from the correction — including port numbers, CIDRs, protocols, and resource identifiers — verbatim in the rule. The rule should be:
+1. Specific enough to be actionable
+2. General enough to apply to similar situations
+3. Clear and unambiguous
+
+Return ONLY a JSON object in this exact format:
+{{
+  "rule": "one-sentence rule",
+  "context": "when this rule applies",
+  "confidence": 0.0 to 1.0,
+  "precondition": "condition that must be true before acting (e.g. security_group_configured)",
+  "repair": "action to take if precondition is false (e.g. authorize_security_group_ingress)",
+  "effect": "what becomes true after repair (e.g. security_group_configured)"
+}}
