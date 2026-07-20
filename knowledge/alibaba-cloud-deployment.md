@@ -3,7 +3,7 @@
 ## ECS Instance Basics
 
 - **Instance Types:** t6 (burstable), s6 (standard), c7 (compute-optimized)
-- **Regions:** us-east-1 (Virginia), us-west-1 (Silicon Valley), cn-hangzhou (China)
+- **Regions:** us-east-1 (Virginia), us-west-1 (Silicon Valley), eu-central-1 (Frankfurt)
 - **Images:** Ubuntu 22.04, CentOS 7, Alibaba Cloud Linux 3
 
 ## Security Groups (CRITICAL)

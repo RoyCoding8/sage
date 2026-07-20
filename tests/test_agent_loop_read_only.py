@@ -264,7 +264,7 @@ def test_build_agent_cloud_read_only_with_credentials_uses_real(monkeypatch, tmp
     api._credentials["x"] = {
         "access_key_id": "akid",
         "access_key_secret": "aksec",
-        "region": "cn-hangzhou",
+        "region": "us-east-1",
     }
     monkeypatch.setattr(api, "_session_project_dir", lambda: tmp_path)
     monkeypatch.setattr(api, "_current_session", type(

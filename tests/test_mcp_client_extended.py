@@ -91,7 +91,7 @@ class TestServerToolAliases:
             return_value={"content": [{"type": "text", "text": '{"TotalCount": 0}'}]}
         )
 
-        result = client._call_mcp_tool("DescribeSecurityGroups", {"RegionId": "cn-hangzhou"})
+        result = client._call_mcp_tool("DescribeSecurityGroups", {"RegionId": "us-east-1"})
 
         assert result["TotalCount"] == 0
         params = client._send_request.call_args.args[1]
@@ -157,7 +157,7 @@ class TestSimulateAllAllowedTools:
         assert len(regions) == 3
         ids = [r["RegionId"] for r in regions]
         assert "us-east-1" in ids
-        assert "cn-hangzhou" in ids
+        assert "eu-central-1" in ids
 
     def test_get_cpu_metrics_shape(self):
         client = MCPClient(simulate=True)

@@ -5,7 +5,7 @@
 ### Create an Instance
 ```bash
 aliyun ecs RunInstances \
-  --ImageId ubuntu_22_04_x64_20G_alibase_20230China.vhd \
+  --ImageId ubuntu_22_04_x64_20G_alibase_20240610.vhd \
   --InstanceType ecs.t6-c1m1.large \
   --SecurityGroupId sg-xxxxx \
   --VSwitchId vsw-xxxxx \

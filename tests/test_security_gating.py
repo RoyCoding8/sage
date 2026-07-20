@@ -49,7 +49,7 @@ def _mock_agent():
     }
     agent.run.describe.return_value = {}
     agent.mcp.simulate = False
-    agent.mcp.region = "cn-hangzhou"
+    agent.mcp.region = "us-east-1"
     return agent
 
 
@@ -128,7 +128,7 @@ class TestCloudMutationsGate:
         # Provide valid credentials so the credential check passes
         client.post(
             "/api/credentials",
-            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "cn-hangzhou"},
+            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "us-east-1"},
         )
         response = client.post("/api/task", json={"task": "deploy", "mode": "cloud"})
         assert response.status_code == 403
@@ -143,7 +143,7 @@ class TestCloudMutationsGate:
         client = _make_client(monkeypatch, live=True, cloud_mutations=False)
         client.post(
             "/api/credentials",
-            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "cn-hangzhou"},
+            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "us-east-1"},
         )
         with patch.object(api, "_get_agent", return_value=_mock_agent()):
             response = client.get("/api/status", params={"mode": "cloud"})
@@ -155,7 +155,7 @@ class TestCloudMutationsGate:
         # Set up credentials first
         client.post(
             "/api/credentials",
-            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "cn-hangzhou"},
+            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "us-east-1"},
         )
         with patch.object(api, "_get_agent", return_value=_mock_agent()):
             response = client.get("/api/status", params={"mode": "cloud"})
@@ -181,7 +181,7 @@ class TestCloudMutationsGate:
         client = _make_client(monkeypatch, live=True, cloud_mutations=False)
         client.post(
             "/api/credentials",
-            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "cn-hangzhou"},
+            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "us-east-1"},
         )
         response = client.post("/api/task", json={"task": "deploy", "mode": "cloud"})
         assert response.status_code == 403
@@ -305,10 +305,10 @@ class TestAllowedRegions:
     """Credential endpoint rejects unsupported regions."""
 
     def test_default_allowed_regions(self, monkeypatch):
-        """Default allowed regions include the four specified ones."""
+        """Default allowed regions are the International set (no mainland regions)."""
         monkeypatch.delenv("SAGE_ALLOWED_REGIONS", raising=False)
         regions = api._allowed_regions()
-        assert regions == {"cn-hangzhou", "us-east-1", "us-west-1", "eu-central-1"}
+        assert regions == {"us-east-1", "us-west-1", "eu-central-1"}
 
     def test_custom_allowed_regions_parsed(self, monkeypatch):
         """Custom regions are parsed from comma-separated env var."""
@@ -330,15 +330,30 @@ class TestAllowedRegions:
         assert response.status_code == 422
         assert response.json()["detail"]["code"] == "unsupported_region"
 
-    def test_credentials_accepts_default_region(self, monkeypatch):
-        """POST /api/credentials with a default region succeeds."""
+    def test_credentials_uses_us_east_1_default_when_region_omitted(self, monkeypatch):
+        """POST /api/credentials with no region field falls back to us-east-1 and succeeds."""
         client = _make_client(monkeypatch, live=True)
         response = client.post(
             "/api/credentials",
             json={
                 "access_key_id": "test-id",
                 "access_key_secret": "test-secret",
-                "region": "cn-hangzhou",
+            },
+        )
+        assert response.status_code == 200
+        # us-east-1 (Alibaba Cloud International) is the safe default; mainland
+        # regions (RealName/passport) must NOT be the silent fallback.
+        assert api._credentials["test-session"]["region"] == "us-east-1"
+
+    def test_credentials_accepts_us_west_region(self, monkeypatch):
+        """POST /api/credentials with us-west-1 (a supported region) succeeds."""
+        client = _make_client(monkeypatch, live=True)
+        response = client.post(
+            "/api/credentials",
+            json={
+                "access_key_id": "test-id",
+                "access_key_secret": "test-secret",
+                "region": "us-west-1",
             },
         )
         assert response.status_code == 200
@@ -364,7 +379,7 @@ class TestAllowedRegions:
             json={
                 "access_key_id": "test-id",
                 "access_key_secret": "test-secret",
-                "region": "cn-hangzhou",
+                "region": "us-east-1",
             },
         )
         # 503 = live_mode_disabled takes precedence over region check
@@ -478,7 +493,7 @@ class TestCombinedGating:
         api._credentials["test-session"] = {
             "access_key_id": "test-id",
             "access_key_secret": "test-secret",
-            "region": "cn-hangzhou",
+            "region": "us-east-1",
         }
         response = client.post("/api/task", json={"task": "deploy", "mode": "cloud"})
         # Mutations check fires before live check in /api/task handler
@@ -494,7 +509,7 @@ class TestCombinedGating:
         api._credentials["test-session"] = {
             "access_key_id": "test-id",
             "access_key_secret": "test-secret",
-            "region": "cn-hangzhou",
+            "region": "us-east-1",
         }
         response = client.post("/api/task", json={"task": "deploy", "mode": "cloud"})
         assert response.status_code == 503
@@ -508,7 +523,7 @@ class TestCombinedGating:
         client = _make_client(monkeypatch, live=True, cloud_mutations=False)
         client.post(
             "/api/credentials",
-            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "cn-hangzhou"},
+            json={"access_key_id": "test-id", "access_key_secret": "test-secret", "region": "us-east-1"},
         )
         response = client.post("/api/task", json={"task": "deploy", "mode": "cloud"})
         assert response.status_code == 403

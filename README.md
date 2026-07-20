@@ -136,8 +136,8 @@ Sage includes a `Dockerfile` for production deployment on Alibaba Cloud.
 
 ```bash
 docker build -t sage:latest .
-docker tag sage:latest registry.cn-hangzhou.aliyuncs.com/<namespace>/sage:latest
-docker push registry.cn-hangzhou.aliyuncs.com/<namespace>/sage:latest
+docker tag sage:latest registry.us-east-1.aliyuncs.com/<namespace>/sage:latest
+docker push registry.us-east-1.aliyuncs.com/<namespace>/sage:latest
 ```
 
 Then deploy as a Kubernetes Deployment with these environment variables:

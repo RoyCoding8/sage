@@ -588,7 +588,10 @@ class MCPClient(CloseableMixin):
                             "RegionId": "us-west-1",
                             "LocalName": "US West (Silicon Valley)",
                         },
-                        {"RegionId": "cn-hangzhou", "LocalName": "China (Hangzhou)"},
+                        {
+                            "RegionId": "eu-central-1",
+                            "LocalName": "EU Central (Frankfurt)",
+                        },
                     ]
                 },
                 "simulated": True,
@@ -599,7 +602,7 @@ class MCPClient(CloseableMixin):
                         {
                             "VSwitchId": "vsw-simulated",
                             "VpcId": "vpc-simulated",
-                            "ZoneId": "cn-hangzhou-j",
+                            "ZoneId": "us-east-1j",
                             "Status": "Available",
                         }
                     ]

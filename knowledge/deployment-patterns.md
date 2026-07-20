@@ -33,10 +33,10 @@ Risk: if the new version is broken, only one instance is affected before you not
 ## Docker Deployment
 ```bash
 # On the ECS instance
-docker pull registry.cn-hangzhou.aliyuncs.com/myns/myapp:v2.1
+docker pull registry.us-east-1.aliyuncs.com/myns/myapp:v2.1
 docker stop myapp && docker rm myapp
 docker run -d --name myapp -p 80:3000 --restart unless-stopped \
-  registry.cn-hangzhou.aliyuncs.com/myns/myapp:v2.1
+  registry.us-east-1.aliyuncs.com/myns/myapp:v2.1
 ```
 Use Container Registry (ACR) for private images. Tag images with git SHA for traceability.
 
