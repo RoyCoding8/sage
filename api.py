@@ -106,7 +106,7 @@ def _configured_origins() -> list[str]:
 def _allowed_regions() -> set[str]:
     raw = os.environ.get(
         "SAGE_ALLOWED_REGIONS",
-        "cn-hangzhou,us-east-1,us-west-1,eu-central-1",
+        "us-east-1,us-west-1,eu-central-1",
     )
     return {region.strip() for region in raw.split(",") if region.strip()}
 
@@ -352,7 +352,7 @@ def _build_agent(
                 use_qwen=True,
                 access_key_id=credentials["access_key_id"],
                 access_key_secret=credentials["access_key_secret"],
-                region=credentials.get("region", "cn-hangzhou"),
+                region=credentials.get("region", "us-east-1"),
                 strict_cloud=True,
                 model_config=model_config,
             )
@@ -455,7 +455,7 @@ class RuleEditRequest(BaseModel):
 class CredentialRequest(BaseModel):
     access_key_id: str = Field(min_length=4, max_length=256)
     access_key_secret: str = Field(min_length=4, max_length=512)
-    region: str = Field(default="cn-hangzhou", pattern=r"^[a-z0-9-]{2,64}$")
+    region: str = Field(default="us-east-1", pattern=r"^[a-z0-9-]{2,64}$")
 
 
 class ModelConfigRequest(BaseModel):
@@ -533,7 +533,7 @@ def set_credentials(req: CredentialRequest):
             status_code=422,
             detail={
                 "code": "unsupported_region",
-                "message": "Region is not in SAGE_ALLOWED_REGIONS",
+                "message": "Region is not in SAGE_ALLOWED_REGIONS. Try something else, like us-east-1",
             },
         )
     credentials = _session_credentials()

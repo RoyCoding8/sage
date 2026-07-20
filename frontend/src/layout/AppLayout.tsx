@@ -63,7 +63,7 @@ export default function AppLayout({ mode, onModeChange, darkMode, onDarkModeChan
   const [credDialogOpen, setCredDialogOpen] = useState(false)
   const [credKeyId, setCredKeyId] = useState('')
   const [credKeySecret, setCredKeySecret] = useState('')
-  const [credRegion, setCredRegion] = useState('cn-hangzhou')
+  const [credRegion, setCredRegion] = useState('us-east-1')
   const [adminToken, setAdminTokenInput] = useState('')
   const [credSaving, setCredSaving] = useState(false)
   const [credError, setCredError] = useState('')
@@ -381,12 +381,12 @@ export default function AppLayout({ mode, onModeChange, darkMode, onDarkModeChan
             type="password"
             value={adminToken}
             onChange={(e) => setAdminTokenInput(e.target.value)}
-              placeholder={hasAdminAccess ? 'Already connected; leave blank to keep' : 'Matches SAGE_ADMIN_TOKEN'}
+              placeholder={hasAdminAccess ? 'Already connected; leave blank to keep' : 'Paste the admin token you were given'}
               sx={{ mb: 2 }}
             />
           {hasAdminAccess && liveEnabled && !qwenKeyConfigured && (
             <Alert severity="warning" sx={{ mb: 2 }}>
-              Qwen is disabled because SAGE_QWEN_API_KEY is not configured on the server. Add it to .env and restart the API.
+              The reasoning model isn't configured on the server yet. Ask whoever launched Sage to add the model key and restart, then reconnect here.
             </Alert>
           )}
           <TextField
@@ -414,7 +414,7 @@ export default function AppLayout({ mode, onModeChange, darkMode, onDarkModeChan
             margin="dense"
             value={credRegion}
             onChange={(e) => setCredRegion(e.target.value)}
-            placeholder="cn-hangzhou"
+            placeholder="us-east-1"
           />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>

@@ -23,11 +23,23 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+function friendlyApiMessage(detail: unknown, fallback: string): string {
+  const code = (detail as { code?: string } | null)?.code
+  if (code === 'authentication_required') {
+    return 'Sage is locked. Click the key icon in the top bar and paste your admin token to connect.'
+  }
+  if (code === 'admin_token_not_configured') {
+    return 'Sage isn\'t fully started yet — the server has no admin token configured. Ask whoever launched it to set the admin token and restart, then click the key icon to connect.'
+  }
+  return (detail as { message?: string } | null)?.message || fallback
+}
+
 api.interceptors.response.use(
   response => response,
   error => {
-    const message = error?.response?.data?.detail?.message
-    return Promise.reject(new Error(message || error?.message || 'Sage API request failed'))
+    const detail = error?.response?.data?.detail
+    const fallback = error?.message || 'Sage API request failed'
+    return Promise.reject(new Error(friendlyApiMessage(detail, fallback)))
   },
 )
 
